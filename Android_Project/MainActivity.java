@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.view.Menu;
@@ -20,7 +22,7 @@ public class MainActivity extends Activity implements  OnClickListener{
 	Button b2;
 	Button b3;
 	EditText et;
-	BluetoothAdapter blueadapt;
+	final BluetoothAdapter blueadapt;
 @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,43 @@ public class MainActivity extends Activity implements  OnClickListener{
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
+    
+    BroadcastReceiver receiver=new BroadcastReceiver(){
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			String prev=blueadapt.EXTRA_PREVIOUS_STATE;
+			String extra=blueadapt.EXTRA_STATE;
+			int state = intent.getIntExtra(extra,-1);
+			String toast="";
+			switch(state)
+			{
+			case blueadapt.STATE_OFF:
+				toast="Bluetooth is off";
+				break;
+			
+			case blueadapt.STATE_ON:
+				toast="Bluetooth is on";
+				break;
+				
+				
+			case blueadapt.STATE_TURNING_OFF:
+				toast="Bluetooth is turning off";
+				break;
+				
+			case blueadapt.STATE_TURNING_ON:
+				toast="Bluetooth is turning on";
+				break;
+			
+			
+			}
+			
+		}
+    	
+    	
+    };
+    
 
 void initialise()
 {
